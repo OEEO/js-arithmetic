@@ -1,5 +1,6 @@
 /*
 * 递归算法
+* 递归函数三要素：1、函数功能，目的；2、递归结束条件；3、递归等价关系式，即F(n) = F(n-1) + F(n-2)之类
 * create by dean
 * date: 2019/6/10
 * */
@@ -13,20 +14,26 @@ let countHowManyTimesToTakeBook = (num) => {
   let countMap = new Map() // 用于储存已计算的值，减少函数执行次数
   let times = 0
   let count = (n) => {
-    if (n < 4) {
-      return 2 + 1
-    }
-    let n1 = countMap.get(n - 1)
-    let n2 = countMap.get(n - 2)
-    n1 = n1 || count(n - 1)
-    n2 = n2 || count(n - 2)
-    // countMap.set(n - 1, n1)
-    // countMap.set(n - 2, n2)
     times++
+    if (n < 1) return 0
+    if (n < 4) {
+      return n
+    }
+
+    let n1 = countMap.get(n - 1) || count(n - 1)
+    countMap.set(n - 1, n1)
+
+    let n2 = countMap.get(n - 2) || count(n - 2)
+    countMap.set(n - 2, n2)
     return n1 + n2
   }
   return { value: count(num), times }
 }
 
-let countResult = countHowManyTimesToTakeBook(1000)
+let countResult = countHowManyTimesToTakeBook(4)
 console.log(countResult.value, `函数执行次数 ${countResult.times}`)
+
+// F(6) = F(5) + F(4)
+// F(5) = F(4) + F(3)
+// F(4) = F(3) + F(2)
+// F(4) = F(3) + F(2)
